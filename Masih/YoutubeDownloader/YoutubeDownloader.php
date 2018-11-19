@@ -480,7 +480,7 @@ class YoutubeDownloader
 				throw new YoutubeException($data['reason'], $data['errorcode']);
 		}
 
-		$result['title'] = trim($data['title']);
+		$result['title'] = isset($data['title']) ? trim($data['title']) : '';
 		$result['image'] = array(
 			'max_resolution' => 'https://i.ytimg.com/vi/' . $this->videoId . '/maxresdefault.jpg',
 			'high_quality' => 'https://i.ytimg.com/vi/' . $this->videoId . '/hqdefault.jpg',
@@ -494,12 +494,12 @@ class YoutubeDownloader
 				'https://i.ytimg.com/vi/' . $this->videoId . '/3.jpg'
 			)
 		);
-		$result['length_seconds'] = $data['length_seconds'];
-		$result['duration'] = vsprintf('%02d:%02d:%02d', $this->parseFloatTime($result['length_seconds']));
-		$result['video_id'] = $data['video_id'];
-		$result['views'] = $data['view_count'];
-		$result['rating'] = round($data['avg_rating']);
-		$result['author'] = trim($data['author']);
+		$result['length_seconds'] = isset($data['length_seconds']) ? $data['length_seconds'] : null;
+		$result['duration'] = $result['length_seconds'] ? vsprintf('%02d:%02d:%02d', $this->parseFloatTime($result['length_seconds'])) : '00:00:00';
+		$result['video_id'] = isset($data['video_id']) ? $data['video_id'] : null;
+		$result['views'] = isset($data['view_count']) ? $data['view_count'] : null;
+		$result['rating'] = isset($data['avg_rating']) ? round($data['avg_rating']) : '0.0';
+		$result['author'] = isset($data['author']) ? trim($data['author']) : '';
 
 		$result['captions'] = array();
 		if (isset($data['has_cc']) && $data['has_cc'] === 'True')
